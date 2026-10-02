@@ -9,7 +9,7 @@ namespace Argon.Host;
 
 public sealed class BrowserSurface : HwndHost
 {
-    private readonly Dictionary<nint, (nint Style, nint ExtendedStyle)> attached = [];
+    private readonly Dictionary<nint, (nint Style, nint ExtendedStyle, uint Owner)> attached = [];
     private nint active;
 
     protected override HandleRef BuildWindowCore(HandleRef parent)
@@ -22,6 +22,10 @@ public sealed class BrowserSurface : HwndHost
     public void Activate(nint browser)
     {
         if (!Native.IsWindow(browser)) throw new InvalidOperationException("Browser window is unavailable.");
+        Native.GetWindowThreadProcessId(browser, out uint owner);
+        // Windows can recycle an HWND after a process exits. Never treat a
+        // recycled handle as the profile window that was previously embedded.
+        if (attached.TryGetValue(browser, out var previous) && previous.Owner != owner) attached.Remove(browser);
         if (!attached.ContainsKey(browser))
         {
             var style = Native.GetWindowLongPtr(browser, -16);
@@ -41,18 +45,25 @@ public sealed class BrowserSurface : HwndHost
                 Native.ShowWindow(browser, 5);
                 throw new Win32Exception(error, "Could not embed the Gecko window. Check process DPI compatibility.");
             }
-            attached[browser] = (style, extended);
+            attached[browser] = (style, extended, owner);
         }
-        if (active != 0 && active != browser) Native.ShowWindow(active, 0);
+        if (active != browser && IsAttachedBrowser(active)) Native.ShowWindow(active, 0);
         active = browser;
         ResizeBrowser();
         Native.ShowWindow(active, 5);
         FocusBrowser();
     }
 
+    private bool IsAttachedBrowser(nint browser)
+    {
+        if (!attached.TryGetValue(browser, out var saved) || !Native.IsWindow(browser)) return false;
+        Native.GetWindowThreadProcessId(browser, out uint owner);
+        return owner == saved.Owner;
+    }
+
     public void FocusBrowser()
     {
-        if (!Native.IsWindow(active)) return;
+        if (!IsAttachedBrowser(active)) return;
         uint targetThread = Native.GetWindowThreadProcessId(active, out _);
         uint currentThread = Native.GetCurrentThreadId();
         bool joined = targetThread != currentThread && Native.AttachThreadInput(currentThread, targetThread, true);
@@ -68,7 +79,7 @@ public sealed class BrowserSurface : HwndHost
 
     private void ResizeBrowser()
     {
-        if (!Native.IsWindow(active) || Handle == 0) return;
+        if (!IsAttachedBrowser(active) || Handle == 0) return;
         Native.GetClientRect(Handle, out var bounds);
         Native.SetWindowPos(active, 0, 0, 0, bounds.Right, bounds.Bottom, 0x0034);
     }
@@ -79,7 +90,7 @@ public sealed class BrowserSurface : HwndHost
         // destroying someone else's HWND or terminating a browser process.
         foreach (var (browser, styles) in attached)
         {
-            if (!Native.IsWindow(browser)) continue;
+            if (!IsAttachedBrowser(browser)) continue;
             Native.SetParent(browser, 0);
             Native.SetWindowLongPtr(browser, -16, styles.Style);
             Native.SetWindowLongPtr(browser, -20, styles.ExtendedStyle);

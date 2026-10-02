@@ -46,7 +46,16 @@ public partial class MainWindow : Window
             button.Click += async (_, _) => await SwitchAsync(workspace);
             var menu = new ContextMenu();
             var rename = new MenuItem { Header = "Rename workspace…" };
-            rename.Click += (_, _) => { string? name = AskName(workspace.Name); if (name != null) { store.Rename(workspace, name); RenderWorkspaces(); } };
+            rename.Click += (_, _) => {
+                string? name = AskName(workspace.Name);
+                if (name == null) return;
+                try {
+                    store.Rename(workspace, name);
+                    if (selected?.Id == workspace.Id) selected = store.Workspaces.Single(w => w.Id == workspace.Id);
+                    RenderWorkspaces();
+                }
+                catch (Exception error) { MessageBox.Show(this, error.Message, "Argon", MessageBoxButton.OK, MessageBoxImage.Error); }
+            };
             menu.Items.Add(rename);
             button.ContextMenu = menu;
             WorkspaceButtons.Children.Add(button);
@@ -122,7 +131,7 @@ public partial class MainWindow : Window
                 if (session.Process.HasExited) continue;
                 Surface.Visibility = Visibility.Visible;
                 Status.Visibility = Visibility.Collapsed;
-                Surface.Activate(session.Window);
+                if (Native.IsWindow(session.Window)) Surface.Activate(session.Window);
                 if (!await session.CloseAsync())
                 {
                     MessageBox.Show(this, "This workspace is still open. Finish or cancel its browser dialog before closing Argon.", "Argon");
