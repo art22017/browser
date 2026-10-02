@@ -4,7 +4,10 @@
 set -euo pipefail
 export SURFER_PLATFORM=win32 SURFER_COMPAT=x86_64 ZEN_CROSS_COMPILING=1
 export ZEN_RELEASE=1 ZEN_GA_DISABLE_PGO=1 ZEN_DISABLE_LTO=1
-export CARGO_INCREMENTAL=0 MOZ_AUTOMATION=1
+export CARGO_INCREMENTAL=0
+# MOZ_AUTOMATION means Mozilla Taskcluster, whose TASK_ID/dependency graph is
+# unavailable on GitHub runners. Keep ordinary local bootstrap active.
+unset MOZ_AUTOMATION
 export PATH="$HOME/.cargo/bin:$PATH"
 
 npm run surfer -- ci --brand release --display-version 0.1a1
@@ -45,6 +48,7 @@ npm run surfer -- import --verbose
 argon_build_root="$PWD"
 mkdir -p "$HOME/.mozbuild"
 (cd "$HOME/.mozbuild" && env -u MOZ_AUTOMATION "$argon_build_root/engine/mach" artifact toolchain --from-build linux64-clang)
+export PATH="$HOME/.mozbuild/clang/bin:$PATH"
 clang_root=$(find "$HOME/.mozbuild/clang/lib/clang" -mindepth 1 -maxdepth 1 -type d | head -n 1)
 printf '\nexport LIB="%s/lib/windows"\n' "$clang_root" >> configs/common/mozconfig
 npm run build
