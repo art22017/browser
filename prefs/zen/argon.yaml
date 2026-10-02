@@ -1,0 +1,23 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. https://mozilla.org/MPL/2.0/.
+- name: argon.bangs.enabled
+  value: true
+- name: argon.hosted-workspace
+  value: false
+# Resolve typed bangs locally; typed queries never go to suggestion services.
+- name: browser.search.suggest.enabled
+  value: false
+- name: browser.urlbar.suggest.searches
+  value: false
+- name: browser.contentblocking.category
+  value: strict
+- name: dom.security.https_only_mode
+  value: true
+- name: signon.management.page.os-auth.enabled
+  value: true
+- name: xpinstall.signatures.required
+  value: true
+- name: app.update.auto
+  value: false
+- name: app.releaseNotesURL
+  value: https://github.com/art22017/browser/releases

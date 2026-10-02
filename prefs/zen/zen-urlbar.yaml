@@ -6,10 +6,10 @@
   value: true
 
 - name: zen.urlbar.show-protections-icon
-  value: false
+  value: true
 
 - name: zen.urlbar.show-contextual-id
-  value: false
+  value: true
 
 - name: zen.urlbar.behavior
   value: floating-on-type
@@ -33,7 +33,7 @@
   value: false
 
 - name: zen.urlbar.open-on-startup
-  value: true
+  value: false
 
 # Mark: Zen suggestions controls
 
