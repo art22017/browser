@@ -40,6 +40,11 @@ printf '\nmk_add_options MOZ_MAKE_FLAGS="-j2"\n' >> configs/common/mozconfig
 npm run ffprefs
 npm run surfer -- import --verbose
 (cd engine && ./mach --no-interactive bootstrap --application-choice browser)
+# Current Firefox bootstrap defers Clang installation until configure. Fetch
+# the official host toolchain explicitly before selecting its Windows runtime.
+argon_build_root="$PWD"
+mkdir -p "$HOME/.mozbuild"
+(cd "$HOME/.mozbuild" && "$argon_build_root/engine/mach" artifact toolchain --from-build linux64-clang)
 clang_root=$(find "$HOME/.mozbuild/clang/lib/clang" -mindepth 1 -maxdepth 1 -type d | head -n 1)
 printf '\nexport LIB="%s/lib/windows"\n' "$clang_root" >> configs/common/mozconfig
 npm run build

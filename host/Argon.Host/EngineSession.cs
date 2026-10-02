@@ -10,8 +10,9 @@ public sealed class EngineSession : IDisposable
     public Process Process { get; }
     public nint Window { get; private set; }
     public Workspace Workspace { get; }
+    private readonly string executable;
 
-    private EngineSession(Process process, Workspace workspace) { Process = process; Workspace = workspace; }
+    private EngineSession(Process process, Workspace workspace, string executable) { Process = process; Workspace = workspace; this.executable = executable; }
 
     public static EngineSession Start(Workspace workspace, WorkspaceStore store)
     {
@@ -20,11 +21,14 @@ public sealed class EngineSession : IDisposable
         store.EnsureProfile(workspace);
         var start = new ProcessStartInfo(engine) { UseShellExecute = false, WorkingDirectory = Path.GetDirectoryName(engine)!, WindowStyle = ProcessWindowStyle.Hidden };
         // ArgumentList prevents workspace names or paths from becoming switches.
+        // Keep Firefox's security/DLL-blocklist launcher alive for lifecycle
+        // tracking. Its child process can own the actual browser HWND.
+        start.ArgumentList.Add("-wait-for-browser");
         start.ArgumentList.Add("-no-remote");
         start.ArgumentList.Add("-profile");
         start.ArgumentList.Add(store.ProfilePath(workspace));
         var process = Process.Start(start) ?? throw new InvalidOperationException("Gecko did not start.");
-        return new EngineSession(process, workspace);
+        return new EngineSession(process, workspace, engine);
     }
 
     public async Task WaitForWindowAsync()
@@ -34,6 +38,7 @@ public sealed class EngineSession : IDisposable
         {
             if (Process.HasExited) throw new InvalidOperationException($"Gecko exited with code {Process.ExitCode}. The profile may already be in use.");
             Window = Native.FindBrowserWindow(Process.Id);
+            if (Window == 0) Window = Native.FindBrowserDescendantWindow(Process.Id, executable);
             if (Window != 0) return;
             await Task.Delay(40);
         }
