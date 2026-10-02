@@ -1,9 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. https://mozilla.org/MPL/2.0/ */
 :root {
-  --argon-font:
-    "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont,
-    "Helvetica Neue", Arial, sans-serif;
+  --argon-font: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
   --argon-glass: light-dark(rgb(243 244 247 / 78%), rgb(29 30 34 / 82%));
   --argon-border: light-dark(rgb(0 0 0 / 9%), rgb(255 255 255 / 12%));
   --argon-noise: url("chrome://browser/content/zen-styles/argon-noise.svg");
@@ -61,10 +59,7 @@ description,
     box-shadow 180ms var(--argon-ease) !important;
 }
 .tab-background[selected] {
-  background-color: light-dark(
-    rgb(255 255 255 / 85%),
-    rgb(255 255 255 / 12%)
-  ) !important;
+  background-color: light-dark(rgb(255 255 255 / 85%), rgb(255 255 255 / 12%)) !important;
   box-shadow:
     0 1px 3px rgb(0 0 0 / 12%),
     inset 0 0 0 1px var(--argon-border);
@@ -150,12 +145,7 @@ panel::part(content) {
 }
 /* The Windows shell owns one permanent caption for all embedded profiles. */
 :root[argon-hosted-workspace]
-  :is(
-    .titlebar-buttonbox-container,
-    #zen-workspaces-button,
-    #zenWorkspaceMoreActions,
-    menuitem[command="cmd_zenOpenWorkspaceCreation"]
-  ) {
+  :is(.titlebar-buttonbox-container, #zen-workspaces-button, #zenWorkspaceMoreActions, menuitem[command="cmd_zenOpenWorkspaceCreation"]) {
   display: none !important;
 }
 .zen-branding-title,

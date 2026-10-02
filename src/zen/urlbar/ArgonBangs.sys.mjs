@@ -45,7 +45,7 @@ export const BANGS = Object.freeze(
     ["spotify", "Spotify", "https://open.spotify.com/search/{query}"],
     ["a", "Amazon", "https://www.amazon.com/s?k={query}"],
     ["ebay", "eBay", "https://www.ebay.com/sch/i.html?_nkw={query}"],
-  ].map(([key, name, template]) => Object.freeze({ key, name, template })),
+  ].map(([key, name, template]) => Object.freeze({ key, name, template }))
 );
 
 export function parseBang(text) {
@@ -53,7 +53,7 @@ export function parseBang(text) {
   if (!match) {
     return null;
   }
-  const bang = BANGS.find((entry) => entry.key === match[1].toLowerCase());
+  const bang = BANGS.find(entry => entry.key === match[1].toLowerCase());
   if (!bang) {
     return null;
   }

@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. https://mozilla.org/MPL/2.0/ */
-import { parseBang } from "resource:///modules/ArgonBangs.sys.mjs";
+const { parseBang } = ChromeUtils.importESModule(
+  "resource:///modules/ArgonBangs.sys.mjs"
+);
 
 // Keep the full URL in Firefox's input and clipboard code. Only the unfocused
 // visual label is shortened; origin/security indicators stay native.
@@ -8,7 +10,7 @@ function initArgonChrome() {
   const inputBox = gURLBar.inputField.parentElement;
   const domain = document.createElementNS(
     "http://www.w3.org/1999/xhtml",
-    "span",
+    "span"
   );
   domain.id = "argon-domain-label";
   domain.setAttribute("aria-hidden", "true");
@@ -77,7 +79,7 @@ function initArgonChrome() {
       gURLBar.inputField.removeEventListener("blur", update);
       gBrowser.tabContainer.removeEventListener("TabSelect", update);
     },
-    { once: true },
+    { once: true }
   );
 }
 

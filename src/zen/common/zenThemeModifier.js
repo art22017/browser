@@ -53,7 +53,10 @@
       this._inMainBrowserWindow =
         window.location.href == "chrome://browser/content/browser.xhtml";
       if (!this._inMainBrowserWindow) {
-        const style = document.createElementNS("http://www.w3.org/1999/xhtml", "link");
+        const style = document.createElementNS(
+          "http://www.w3.org/1999/xhtml",
+          "link"
+        );
         style.rel = "stylesheet";
         style.href = "chrome://browser/content/zen-styles/argon-settings.css";
         document.documentElement.append(style);
