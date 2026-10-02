@@ -9,6 +9,11 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 npm run surfer -- ci --brand release --display-version 0.1a1
 npm run download
+# Surfer creates an unborn Git branch for source archives. Firefox bootstrap
+# queries HEAD's timestamp, so seed metadata without staging gigabytes of source.
+if ! git -C engine rev-parse --verify HEAD >/dev/null 2>&1; then
+  git -C engine -c user.name='Argon CI' -c user.email='argon-ci@users.noreply.github.com' commit --allow-empty -m 'Firefox source archive baseline'
+fi
 
 mkdir -p "$HOME/win-cross"
 curl --fail --location --retry 3 \
@@ -34,7 +39,7 @@ printf '\nexport MOZ_WINDOWS_RS_DIR=%s/engine/windows-%s\n' "$PWD" "$crate_versi
 printf '\nmk_add_options MOZ_MAKE_FLAGS="-j2"\n' >> configs/common/mozconfig
 npm run ffprefs
 npm run surfer -- import --verbose
-npm run bootstrap
+(cd engine && ./mach --no-interactive bootstrap --application-choice browser)
 clang_root=$(find "$HOME/.mozbuild/clang/lib/clang" -mindepth 1 -maxdepth 1 -type d | head -n 1)
 printf '\nexport LIB="%s/lib/windows"\n' "$clang_root" >> configs/common/mozconfig
 npm run build
