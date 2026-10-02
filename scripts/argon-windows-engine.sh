@@ -44,7 +44,7 @@ npm run surfer -- import --verbose
 # the official host toolchain explicitly before selecting its Windows runtime.
 argon_build_root="$PWD"
 mkdir -p "$HOME/.mozbuild"
-(cd "$HOME/.mozbuild" && "$argon_build_root/engine/mach" artifact toolchain --from-build linux64-clang)
+(cd "$HOME/.mozbuild" && env -u MOZ_AUTOMATION "$argon_build_root/engine/mach" artifact toolchain --from-build linux64-clang)
 clang_root=$(find "$HOME/.mozbuild/clang/lib/clang" -mindepth 1 -maxdepth 1 -type d | head -n 1)
 printf '\nexport LIB="%s/lib/windows"\n' "$clang_root" >> configs/common/mozconfig
 npm run build
