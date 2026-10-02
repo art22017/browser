@@ -3,7 +3,7 @@
   <Grid>
     <Grid.RowDefinitions><RowDefinition Height="40"/><RowDefinition Height="*"/><RowDefinition Height="48"/></Grid.RowDefinitions>
     <Border Grid.Row="0" BorderBrush="#16FFFFFF" BorderThickness="0,0,0,1">
-      <Grid><TextBlock Text="Argon" FontWeight="SemiBold" Margin="16,0" VerticalAlignment="Center"/>
+      <Grid Background="{StaticResource Grain}"><TextBlock x:Name="WorkspaceCaption" Text="Argon" FontWeight="SemiBold" Margin="16,0" VerticalAlignment="Center"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
           <Button Content="−" Width="42" Click="MinimizeClick" ToolTip="Minimize" AutomationProperties.Name="Minimize window"/>
           <Button Content="□" Width="42" Click="MaximizeClick" ToolTip="Maximize / restore" AutomationProperties.Name="Maximize or restore window"/>
@@ -13,7 +13,7 @@
     </Border>
     <local:BrowserSurface x:Name="Surface" Grid.Row="1"/>
     <Border Grid.Row="2" BorderBrush="#16FFFFFF" BorderThickness="0,1,0,0" Background="#25262B">
-      <Grid>
+      <Grid Background="{StaticResource Grain}">
         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"><StackPanel x:Name="WorkspaceButtons" Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0"/></ScrollViewer>
         <Button Grid.Column="1" Content="+ Workspace" Margin="8,4" Click="CreateWorkspaceClick" ToolTip="Create a workspace with its own profile"/>

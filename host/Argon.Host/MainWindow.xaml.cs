@@ -37,6 +37,8 @@ public partial class MainWindow : Window
 
     private void RenderWorkspaces()
     {
+        WorkspaceCaption.Text = selected == null ? "Argon" : $"Argon · {selected.Name}";
+        Title = WorkspaceCaption.Text;
         WorkspaceButtons.Children.Clear();
         foreach (var workspace in store.Workspaces)
         {

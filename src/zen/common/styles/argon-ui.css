@@ -112,13 +112,14 @@ description,
     opacity: 0;
   }
 }
-#urlbar[breakout-extend] .urlbar-background {
+:root #urlbar[breakout-extend] .urlbar-background {
   background:
     var(--argon-noise) repeat,
     var(--argon-glass) !important;
-  backdrop-filter: blur(32px) saturate(120%);
+  backdrop-filter: blur(32px) saturate(120%) !important;
   border: 1px solid var(--argon-border) !important;
   border-radius: 22px !important;
+  outline: none !important;
   box-shadow:
     0 24px 80px rgb(0 0 0 / 28%),
     0 4px 16px rgb(0 0 0 / 12%) !important;
@@ -148,7 +149,13 @@ panel::part(content) {
   visibility: visible !important;
 }
 /* The Windows shell owns one permanent caption for all embedded profiles. */
-:root[argon-hosted-workspace] .titlebar-buttonbox-container {
+:root[argon-hosted-workspace]
+  :is(
+    .titlebar-buttonbox-container,
+    #zen-workspaces-button,
+    #zenWorkspaceMoreActions,
+    menuitem[command="cmd_zenOpenWorkspaceCreation"]
+  ) {
   display: none !important;
 }
 .zen-branding-title,

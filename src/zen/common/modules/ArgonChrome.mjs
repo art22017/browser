@@ -29,7 +29,7 @@ function initArgonChrome() {
     ) {
       // Preserve subdomains, punycode and nonstandard ports: hiding them makes
       // visually similar origins difficult to distinguish.
-      domain.textContent = `${uri.scheme === "http" ? "http://" : ""}${uri.asciiHost}${uri.port !== -1 ? ":" + uri.port : ""}`;
+      domain.textContent = `${uri.scheme === "http" ? "http://" : ""}${uri.asciiHostPort}`;
       gURLBar.setAttribute("argon-domain-only", "true");
     }
     const bang = parseBang(gURLBar.inputField.value);
@@ -60,6 +60,11 @@ function initArgonChrome() {
   });
   if (Services.prefs.getBoolPref("argon.hosted-workspace", false)) {
     document.documentElement.setAttribute("argon-hosted-workspace", "true");
+    // Argon's profile switcher is the only workspace creation entry point in
+    // hosted mode. Zen tab-space creation would share this profile's logins.
+    document
+      .getElementById("cmd_zenOpenWorkspaceCreation")
+      ?.setAttribute("disabled", "true");
   }
   update();
   window.addEventListener(

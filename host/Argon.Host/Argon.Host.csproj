@@ -10,4 +10,5 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>../../configs/branding/release/firefox.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup><Resource Include="Assets/noise.png"/></ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ Each **Argon workspace** starts its own Gecko parent process using its own profi
 
 The native Windows shell embeds the active profile's browser HWND as a child window. Switching workspaces shows another already-running child window in the same shell. Inactive profiles keep running; memory use increases with the number of open workspaces. Gecko's renderer sandbox and extension signature checks remain enabled.
 
-Zen's existing tab spaces remain available **within a profile**. They are organizational groups, not independent Argon workspaces. Authentication dialogs and browser windows explicitly opened by a site/user can remain separate native windows belonging to that workspace's process.
+In hosted mode, Argon's shell is the workspace creation/switching entry point; the native Zen tab-space creation controls are hidden to avoid confusing tab organization with independent profiles. Authentication dialogs and browser windows explicitly opened by a site/user can remain separate native windows belonging to that workspace's process.
 
 ## Interface
 
@@ -25,7 +25,7 @@ Argon uses Firefox's password manager, profile encryption and Windows OS reauthe
 
 ## Windows builds
 
-Run the **Argon Windows** workflow from GitHub Actions on the implementation branch. It runs storage, native embedding and bang tests; cross-compiles the Gecko engine on a standard Ubuntu runner; publishes a self-contained .NET Windows shell; and assembles a portable ZIP and per-user installer. No Zen deployment key, private runner or update-signing secret is required. Build artifacts are named **Argon-Windows-x64** and include SHA-256 hashes.
+Pushing the implementation branch starts the **Argon Windows** workflow. Once the workflow is on the default branch, it can also be run manually from GitHub Actions. It runs storage, native embedding and bang tests; cross-compiles the Gecko engine on a standard Ubuntu runner; publishes a self-contained .NET Windows shell; and assembles a portable ZIP and per-user installer. No Zen deployment key, private runner or update-signing secret is required. Build artifacts are named **Argon-Windows-x64** and include SHA-256 hashes.
 
 Extract the full portable package and start `Argon.exe`. Its `engine` directory must stay beside it. The engine-only executable is not the workspace shell.
 
