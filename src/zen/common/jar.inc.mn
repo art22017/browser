@@ -6,6 +6,7 @@
         content/browser/ZenPreloadedScripts.js                                  (../../zen/common/ZenPreloadedScripts.js)
         content/browser/zen-sets.js                                             (../../zen/common/zen-sets.js)
 
+        content/browser/zen-components/ArgonChrome.mjs                       (../../zen/common/modules/ArgonChrome.mjs)
         content/browser/ZenStartup.mjs                                          (../../zen/common/modules/ZenStartup.mjs)
         content/browser/ZenUpdates.mjs                                          (../../zen/common/modules/ZenUpdates.mjs)
         content/browser/ZenUIManager.mjs                                        (../../zen/common/modules/ZenUIManager.mjs)
@@ -36,3 +37,7 @@
         content/browser/zen-styles/zen-panels/bookmarks.css                     (../../zen/common/styles/zen-panels/bookmarks.css)
         content/browser/zen-styles/zen-panels/print.css                         (../../zen/common/styles/zen-panels/print.css)
         content/browser/zen-styles/zen-panels/dialog.css                        (../../zen/common/styles/zen-panels/dialog.css)
+        content/browser/zen-styles/argon-ui.css (../../zen/common/styles/argon-ui.css)
+        content/browser/zen-styles/argon-settings.css (../../zen/common/styles/argon-settings.css)
+        content/browser/zen-styles/argon-noise.svg (../../zen/common/styles/argon-noise.svg)
+        content/browser/zen-styles/argon-search.svg (../../zen/common/styles/argon-search.svg)

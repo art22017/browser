@@ -1,0 +1,13 @@
+diff --git a/browser/components/urlbar/UrlbarProviderSearchSuggestions.sys.mjs b/browser/components/urlbar/UrlbarProviderSearchSuggestions.sys.mjs
+--- a/browser/components/urlbar/UrlbarProviderSearchSuggestions.sys.mjs
++++ b/browser/components/urlbar/UrlbarProviderSearchSuggestions.sys.mjs
+@@ -95,4 +95,9 @@
+   async isActive(queryContext) {
++    // Bang input is resolved locally, even if ordinary suggestions are enabled.
++    if (queryContext.searchString.trimStart().startsWith("!")) {
++      return false;
++    }
++
+     // If the sources don't include search or the user used a restriction
+     // character other than search, don't allow any suggestions.
+     if (

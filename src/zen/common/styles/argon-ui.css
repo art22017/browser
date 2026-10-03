@@ -1,0 +1,180 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. https://mozilla.org/MPL/2.0/ */
+:root {
+  --argon-font: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --argon-glass: light-dark(rgb(243 244 247 / 78%), rgb(29 30 34 / 82%));
+  --argon-border: light-dark(rgb(0 0 0 / 9%), rgb(255 255 255 / 12%));
+  --argon-noise: url("chrome://browser/content/zen-styles/argon-noise.svg");
+  --argon-ease: cubic-bezier(0.2, 0.75, 0.25, 1);
+  --zen-border-radius: 12px;
+  --zen-squircle-value: 1;
+  --zen-main-browser-background: var(--argon-glass) !important;
+  --zen-main-browser-background-toolbar: var(--argon-glass) !important;
+  --zen-main-browser-background-old: var(--argon-glass) !important;
+  --zen-main-browser-background-toolbar-old: var(--argon-glass) !important;
+  --zen-colors-tertiary: light-dark(#f4f5f7, #202125);
+  --zen-toolbar-element-bg: light-dark(rgb(0 0 0 / 5%), rgb(255 255 255 / 6%));
+  --zen-primary-color: #536de5;
+  --panel-border-radius: 16px;
+  --zen-toolbar-height: 44px;
+  font-family: var(--argon-font) !important;
+}
+toolbar,
+panel,
+menupopup,
+button,
+input,
+textbox,
+label,
+description,
+.tab-label,
+.urlbar-input {
+  font-family: var(--argon-font) !important;
+}
+#zen-main-app-wrapper {
+  background: transparent !important;
+}
+.zen-browser-generic-background::after {
+  background-color: var(--argon-glass) !important;
+  background-image: var(--argon-noise) !important;
+  background-repeat: repeat;
+  backdrop-filter: blur(32px) saturate(125%);
+}
+.zen-browser-generic-background::before {
+  background: transparent !important;
+}
+.zen-browser-grain {
+  display: none !important;
+}
+#navigator-toolbox {
+  padding-inline: 8px;
+}
+.tabbrowser-tab {
+  border-radius: 10px;
+}
+.tab-background {
+  border-radius: 10px !important;
+  transition:
+    background-color 180ms var(--argon-ease),
+    box-shadow 180ms var(--argon-ease) !important;
+}
+.tab-background[selected] {
+  background-color: light-dark(rgb(255 255 255 / 85%), rgb(255 255 255 / 12%)) !important;
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 12%),
+    inset 0 0 0 1px var(--argon-border);
+}
+.tab-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+.toolbarbutton-1 {
+  --toolbarbutton-border-radius: 9px;
+}
+#nav-bar {
+  padding-inline: 8px;
+}
+#urlbar-container {
+  max-width: 780px;
+  margin-inline: auto;
+}
+#urlbar:not([breakout-extend]) {
+  text-align: center;
+}
+#urlbar:not([breakout-extend]) .urlbar-background {
+  border-radius: 10px !important;
+}
+.urlbar-input-box {
+  position: relative;
+}
+#argon-domain-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+  font-size: 13px;
+  opacity: 0;
+}
+#urlbar[argon-domain-only]:not([focused]):not([breakout-extend]) {
+  & #argon-domain-label {
+    opacity: 1;
+  }
+  & .urlbar-input {
+    opacity: 0;
+  }
+}
+:root #urlbar[breakout-extend] .urlbar-background {
+  background:
+    var(--argon-noise) repeat,
+    var(--argon-glass) !important;
+  backdrop-filter: blur(32px) saturate(120%) !important;
+  border: 1px solid var(--argon-border) !important;
+  border-radius: 22px !important;
+  outline: none !important;
+  box-shadow:
+    0 24px 80px rgb(0 0 0 / 28%),
+    0 4px 16px rgb(0 0 0 / 12%) !important;
+}
+#urlbar[breakout-extend] {
+  --urlbarview-row-min-height: 42px;
+}
+.urlbarView-row-inner {
+  border-radius: 11px !important;
+}
+#argon-bang-chip:not([hidden]) {
+  color: light-dark(#3854ce, #a5b6ff);
+  border-inline-end: 1px solid currentColor;
+  padding-inline: 7px 12px;
+  margin-inline-end: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  align-self: center;
+}
+panel::part(content) {
+  border-radius: 16px !important;
+  background-image: var(--argon-noise);
+  backdrop-filter: blur(24px) saturate(120%);
+}
+.titlebar-buttonbox-container {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+/* The Windows shell owns one permanent caption for all embedded profiles. */
+:root[argon-hosted-workspace]
+  :is(.titlebar-buttonbox-container, #zen-workspaces-button, #zenWorkspaceMoreActions, menuitem[command="cmd_zenOpenWorkspaceCreation"]) {
+  display: none !important;
+}
+.zen-branding-title,
+.zen-branding-title-italic {
+  font-family: var(--argon-font) !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+  letter-spacing: -0.05em;
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --argon-glass: light-dark(#f4f5f7, #202125);
+    --argon-noise: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tab-background,
+  .urlbar-background,
+  .toolbarbutton-1 {
+    transition: none !important;
+  }
+}
+@media (forced-colors: active) {
+  :root {
+    --argon-glass: Canvas;
+    --argon-border: CanvasText;
+    --argon-noise: none;
+  }
+  #argon-bang-chip:not([hidden]) {
+    color: LinkText;
+  }
+}

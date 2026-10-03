@@ -1,0 +1,54 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. https://mozilla.org/MPL/2.0/ */
+:root {
+  --argon-font: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --argon-noise: url("chrome://browser/content/zen-styles/argon-noise.svg");
+  --in-content-page-background: light-dark(#f4f5f7, #202125) !important;
+  --in-content-box-background: light-dark(rgb(255 255 255 / 75%), rgb(255 255 255 / 5%)) !important;
+  --in-content-primary-button-background: light-dark(#435ccf, #91a6ff) !important;
+  --in-content-accent-color: light-dark(#435ccf, #91a6ff) !important;
+  --button-border-radius: 10px;
+  font-family: var(--argon-font) !important;
+}
+body {
+  background-image: var(--argon-noise);
+}
+button,
+input,
+select,
+textarea,
+label,
+description,
+h1,
+h2,
+.zen-branding-title {
+  font-family: var(--argon-font) !important;
+}
+.navigation {
+  background:
+    var(--argon-noise) repeat,
+    light-dark(rgb(235 237 242 / 80%), rgb(25 26 30 / 85%)) !important;
+  backdrop-filter: blur(24px);
+  border-inline-end: 1px solid light-dark(rgb(0 0 0 / 8%), rgb(255 255 255 / 8%));
+}
+groupbox,
+.setting-group {
+  border-radius: 14px;
+  padding: 16px;
+  background: var(--in-content-box-background);
+  border: 1px solid light-dark(rgb(0 0 0 / 6%), rgb(255 255 255 / 8%));
+}
+button,
+menulist {
+  border-radius: 10px !important;
+}
+@media (forced-colors: active) {
+  body,
+  .navigation {
+    background: Canvas !important;
+  }
+  groupbox,
+  .setting-group {
+    border-color: CanvasText;
+  }
+}
