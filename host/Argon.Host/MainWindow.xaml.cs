@@ -37,7 +37,7 @@ public partial class MainWindow : Window
 
     private void RenderWorkspaces()
     {
-        WorkspaceCaption.Text = selected == null ? "Argon" : $"Argon · {selected.Name}";
+        WorkspaceCaption.Text = selected == null ? "Argon" : $"Argon \u00B7 {selected.Name}";
         Title = WorkspaceCaption.Text;
         WorkspaceButtons.Children.Clear();
         foreach (var workspace in store.Workspaces)
@@ -78,7 +78,7 @@ public partial class MainWindow : Window
                 session = EngineSession.Start(workspace, store);
                 sessions.Add(workspace.Id, session);
             }
-            if (!Native.IsWindow(session.Window)) await session.WaitForWindowAsync();
+            if (!session.HasBrowserWindow) await session.WaitForWindowAsync();
             // Store session before embedding: a DPI/parenting failure must not
             // orphan a running browser or launch a duplicate against its profile.
             Surface.Visibility = Visibility.Visible;
@@ -131,7 +131,7 @@ public partial class MainWindow : Window
                 if (session.Process.HasExited) continue;
                 Surface.Visibility = Visibility.Visible;
                 Status.Visibility = Visibility.Collapsed;
-                if (Native.IsWindow(session.Window)) Surface.Activate(session.Window);
+                if (session.HasBrowserWindow) Surface.Activate(session.Window);
                 if (!await session.CloseAsync())
                 {
                     MessageBox.Show(this, "This workspace is still open. Finish or cancel its browser dialog before closing Argon.", "Argon");

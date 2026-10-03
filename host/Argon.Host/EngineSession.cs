@@ -11,6 +11,17 @@ public sealed class EngineSession : IDisposable
     public nint Window { get; private set; }
     public Workspace Workspace { get; }
     private readonly string executable;
+    private uint windowOwner;
+
+    public bool HasBrowserWindow
+    {
+        get
+        {
+            if (Process.HasExited || Window == 0 || !Native.IsWindow(Window)) return false;
+            Native.GetWindowThreadProcessId(Window, out uint owner);
+            return windowOwner != 0 && owner == windowOwner;
+        }
+    }
 
     private EngineSession(Process process, Workspace workspace, string executable) { Process = process; Workspace = workspace; this.executable = executable; }
 
@@ -39,7 +50,11 @@ public sealed class EngineSession : IDisposable
             if (Process.HasExited) throw new InvalidOperationException($"Gecko exited with code {Process.ExitCode}. The profile may already be in use.");
             Window = Native.FindBrowserWindow(Process.Id);
             if (Window == 0) Window = Native.FindBrowserDescendantWindow(Process.Id, executable);
-            if (Window != 0) return;
+            if (Window != 0)
+            {
+                Native.GetWindowThreadProcessId(Window, out windowOwner);
+                if (HasBrowserWindow) return;
+            }
             await Task.Delay(40);
         }
         // Never kill a process that may hold unsaved forms or profile writes.
@@ -49,7 +64,7 @@ public sealed class EngineSession : IDisposable
     public async Task<bool> CloseAsync()
     {
         if (Process.HasExited) return true;
-        if (Native.IsWindow(Window)) Native.PostMessage(Window, 0x0010, 0, 0); // WM_CLOSE, normal Gecko shutdown
+        if (HasBrowserWindow) Native.PostMessage(Window, 0x0010, 0, 0); // WM_CLOSE, normal Gecko shutdown
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(8));
         try { await Process.WaitForExitAsync(timeout.Token); return true; }
         catch (OperationCanceledException) { return false; }
